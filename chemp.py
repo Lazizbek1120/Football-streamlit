@@ -41,7 +41,7 @@ prob_df = pd.DataFrame(results)
 prob_df = prob_df.sort_values(by="Win Probability (%)", ascending=False)
 
 st.subheader(" Jamoalar reytingi")
-st.dataframe(prob_df)
+# st.dataframe(prob_df)
 
 # Eng yuqori ehtimol
 top_team = prob_df.iloc[0]
@@ -59,3 +59,4 @@ plt.xlabel("Team")
 plt.ylabel("Win Probability (%)")
 
 st.pyplot(plt)
+
