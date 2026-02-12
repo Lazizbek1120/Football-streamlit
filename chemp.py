@@ -7,7 +7,7 @@ st.set_page_config(page_title="UCL Winner Probability", layout="wide")
 st.title(" Champions League Kubok Ehtimoli")
 
 # CSV yuklash
-df = pd.read_csv(r"C:\Users\HP\Desktop\Lazizbek\chempions\champions_league_matches.csv")
+df = pd.read_csv("champions_league_matches.csv")
 
 # Barcha jamoalarni olish
 teams = pd.concat([df['home_team'], df['away_team']]).unique()
@@ -57,4 +57,5 @@ plt.bar(top10["Team"], top10["Win Probability (%)"])
 plt.xticks(rotation=45)
 plt.xlabel("Team")
 plt.ylabel("Win Probability (%)")
+
 st.pyplot(plt)
