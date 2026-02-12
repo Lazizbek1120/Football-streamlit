@@ -1,34 +1,60 @@
 import streamlit as st
 import pandas as pd
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
-st.title("champions league Winner Probability")
+st.set_page_config(page_title="UCL Winner Probability", layout="wide")
 
+st.title(" Champions League Kubok Ehtimoli")
+
+# CSV yuklash
 df = pd.read_csv("champions_league_matches.csv")
 
+# Barcha jamoalarni olish
 teams = pd.concat([df['HomeTeam'], df['AwayTeam']]).unique()
 
-team = st.selectbox("Jamoani tanlang", teams)
+results = []
 
-# Jamoa oyinlari
-matches = df[(df['HomeTeam'] == team) | (df['AwayTeam'] == team)]
+for team in teams:
+    matches = df[(df['HomeTeam'] == team) | (df['AwayTeam'] == team)]
+    total_matches = len(matches)
+    wins = 0
 
-total_matches = len(matches)
+    for _, row in matches.iterrows():
+        if row['HomeTeam'] == team and row['FTHG'] > row['FTAG']:
+            wins += 1
+        elif row['AwayTeam'] == team and row['FTAG'] > row['FTHG']:
+            wins += 1
 
-# Yutgan oyinlar hisoblash
-wins = 0
+    probability = (wins / total_matches * 100) if total_matches > 0 else 0
 
-for _, row in matches.iterrows():
-    if row['HomeTeam'] == team and row['FTHG'] > row['FTAG']:
-        wins += 1
-    elif row['AwayTeam'] == team and row['FTAG'] > row['FTHG']:
-        wins += 1
+    results.append({
+        "Team": team,
+        "Matches": total_matches,
+        "Wins": wins,
+        "Win Probability (%)": round(probability, 2)
+    })
 
-if total_matches > 0:
-    win_rate = wins / total_matches
-else:
-    win_rate = 0
+# DataFrame qilish
+prob_df = pd.DataFrame(results)
 
-st.write(f"Umumiy o'yinlar: {total_matches}")
-st.write(f"Yutgan o'yinlar: {wins}")
-st.write(f"Taxminiy kubok ehtimoli: {round(win_rate*100,2)} %")
+# Reyting
+prob_df = prob_df.sort_values(by="Win Probability (%)", ascending=False)
+
+st.subheader(" Jamoalar reytingi")
+st.dataframe(prob_df)
+
+# Eng yuqori ehtimol
+top_team = prob_df.iloc[0]
+st.success(f" Eng yuqori ehtimol: {top_team['Team']} ({top_team['Win Probability (%)']}%)")
+
+# Grafik
+st.subheader("Top 10 Jamoa")
+
+top10 = prob_df.head(10)
+
+plt.figure()
+plt.bar(top10["Team"], top10["Win Probability (%)"])
+plt.xticks(rotation=45)
+plt.xlabel("Team")
+plt.ylabel("Win Probability (%)")
+st.pyplot(plt)
