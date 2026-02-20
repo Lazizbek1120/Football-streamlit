@@ -3,10 +3,10 @@ import numpy as np
 import joblib
 
 # Yuklash
-model = joblib.load(r"C:\Users\HP\Desktop\Lazizbek\Osimliklar\plant_model.pkl")
-scaler = joblib.load(r"C:\Users\HP\Desktop\Lazizbek\Osimliklar\scaler.pkl")
-le = joblib.load(r"C:\Users\HP\Desktop\Lazizbek\Osimliklar\label_encoder.pkl")
-feature_names = joblib.load(r"C:\Users\HP\Desktop\Lazizbek\Osimliklar\feature_names.pkl")
+model = joblib.load("plant_model.pkl")
+scaler = joblib.load("scaler.pkl")
+le = joblib.load("label_encoder.pkl")
+feature_names = joblib.load("feature_names.pkl")
 
 st.title(" plant")
 
@@ -30,3 +30,4 @@ if st.button("Predict"):
 
     st.success(f" Kasallik: {result[0]}")
     st.info(f"Ishonchlilik: {confidence:.2f}%")
+
