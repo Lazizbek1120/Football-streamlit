@@ -3,4 +3,5 @@ joblib
 
 numpy
 
-sciket-learn
+
+
